@@ -1,5 +1,4 @@
 import re
-import copy
 
 import cv2
 import numpy as np
@@ -28,14 +27,14 @@ def get_count_from_img(img):
         plain_cnt = 0
         if plain is not None and (cnt := plain.group(1)) != '':
             plain_cnt = int(cnt)
-            
-            
+
+
         f = r"([\d]*) PLAN vessels"
         ship = re.search(f, text)
         ship_cnt = 0
         if ship is not None and (cnt := ship.group(1)) != '':
             ship_cnt = int(cnt)
-            
+
         f = r"([\d]*) of the"
         adiz = re.search(f, text)
         adiz_cnt = 0
@@ -70,7 +69,7 @@ def get_air_activity(url) -> tuple[str, str]:
 
     if img is None:
         img = soup.select_one('span#ContentPlaceHolder1_lab_Descr > div > div > img')
-        
+
     if img is None:
         plain = re.search(r"([\d]*)架次", html)
 
@@ -80,9 +79,9 @@ def get_air_activity(url) -> tuple[str, str]:
         ship = re.search(r"([\d]*)艘次", html)
         if ship is not None:
             print(ship.group(1))
-            
+
         return None, None
-    
+
     date = re.search(r"([\d]*)", img['alt']).group()
     img_url = img['src']
 
@@ -90,7 +89,7 @@ def get_air_activity(url) -> tuple[str, str]:
 
 def get_aspx_hidden_value(url):
     html = requests.get(url).text
-    
+
     viewstate = re.findall(r'<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="(.*?)" />', html, re.I)
     eventvalidation = re.findall(r'<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="(.*?)" />', html, re.I)
     viewstategenerator = re.findall(r'input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="(.*?)" />', html, re.I)
@@ -98,7 +97,7 @@ def get_aspx_hidden_value(url):
     return viewstate[0], eventvalidation[0], viewstategenerator[0]
 
 def main():
-    for i in range(7, 20):
+    for i in range(0, 4):
         viewstate, eventvalidation, viewstategenerator = get_aspx_hidden_value(AIRFORCE_NEWS_LIST_URL)
 
         data = {
@@ -121,8 +120,6 @@ def main():
                 continue
 
             img = get_img_from_url(img_url)
-            height, width, _ = img.shape
-
             print(date, get_count_from_img(img))
 
 if __name__ == "__main__":
