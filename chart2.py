@@ -156,9 +156,6 @@ balloon = [v[3] for v in values]
 rocket = [v[4] for v in values]
 
 plt.figure(figsize=(20, 10))
-# plt.plot(dates, plains, label="plane", marker="o")
-# plt.plot(dates, ships, label="ship", marker="o")
-# plt.plot(dates, enter_azid_plains, label="adiz", marker="o")
 plt.plot(dates, balloon, label="balloon", marker="o")
 plt.plot(dates, rocket, label="rocket", marker="o")
 
